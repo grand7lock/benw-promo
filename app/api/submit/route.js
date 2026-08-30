@@ -33,6 +33,26 @@ export async function GET() {
   })
 }
 
+// ⚠️ 일회용 정리 엔드포인트 — 연결 테스트로 들어간 더미 행만 지운다.
+// 지우고 나면 이 핸들러는 바로 제거한다.
+export async function DELETE(request) {
+  if (request.headers.get('x-cleanup') !== 'benw-test-row-cleanup-0830') {
+    return NextResponse.json({ ok: false }, { status: 403 })
+  }
+
+  const supabase = getSupabase()
+  if (!supabase) return NextResponse.json({ ok: false, error: 'no supabase' }, { status: 500 })
+
+  const { data, error } = await supabase
+    .from('signups')
+    .delete()
+    .eq('child_name', '테스트')
+    .select()
+
+  if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 })
+  return NextResponse.json({ ok: true, deleted: data?.length ?? 0 })
+}
+
 export async function POST(request) {
   let body
   try {
