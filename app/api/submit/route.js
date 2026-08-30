@@ -41,13 +41,13 @@ export async function POST(request) {
     return NextResponse.json({ ok: false, error: '요청을 읽지 못했습니다.' }, { status: 400 })
   }
 
-  const { grade, weekly_load, pain, size, child_name, consent } = body || {}
+  const { orderer_name, size, wish_date, consent } = body || {}
 
-  if (!grade || !size) {
-    return NextResponse.json(
-      { ok: false, error: '학년과 사이즈는 꼭 골라주세요.' },
-      { status: 400 },
-    )
+  if (!orderer_name || !String(orderer_name).trim()) {
+    return NextResponse.json({ ok: false, error: '주문자명을 적어주세요.' }, { status: 400 })
+  }
+  if (!size) {
+    return NextResponse.json({ ok: false, error: '상품 옵션을 골라주세요.' }, { status: 400 })
   }
 
   // 개인정보(아이 이름)를 받으므로 동의 없이는 저장하지 않는다. 클라이언트 검증만으로는 부족하다.
@@ -62,16 +62,14 @@ export async function POST(request) {
 
   // Supabase 를 아직 안 붙였어도 신청 흐름은 끊기지 않게 한다.
   if (!supabase) {
-    console.log('[signup · 미저장]', { grade, size, pain })
+    console.log('[signup · 미저장]', { size })
     return NextResponse.json({ ok: true, stored: false })
   }
 
   const { error } = await supabase.from('signups').insert({
-    grade,
-    weekly_load: weekly_load || null,
-    pain: pain || null,
+    orderer_name: String(orderer_name).trim().slice(0, 40),
     size,
-    child_name: child_name || null,
+    wish_date: wish_date || null,
   })
 
   if (error) {

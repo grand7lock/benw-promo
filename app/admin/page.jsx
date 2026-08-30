@@ -58,10 +58,9 @@ export default function Admin() {
   }
 
   function downloadCsv() {
-    const head = ['신청시각', '학년', '사이즈', '요일별 짐', '짜증나는 순간', '아이 이름']
+    const head = ['신청시각', '주문자명', '상품 옵션', '받는 희망일자']
     const body = rows.map((r) => [
-      fmt(r.created_at), r.grade, sizeName(r.size),
-      r.weekly_load || '', r.pain || '', r.child_name || '',
+      fmt(r.created_at), r.orderer_name || '', sizeName(r.size), r.wish_date || '',
     ])
     const esc = (v) => `"${String(v).replace(/"/g, '""')}"`
     const csv = '﻿' + [head, ...body].map((line) => line.map(esc).join(',')).join('\r\n')
@@ -81,7 +80,7 @@ export default function Admin() {
           <span className="eyebrow">BENW 관리자</span>
           <h1>신청 명단</h1>
           <p className="muted">
-            아이 이름·학년이 담겨 있습니다. 비밀번호를 넣어주세요.
+            주문자명이 담겨 있습니다. 비밀번호를 넣어주세요.
           </p>
           <input
             type="password" value={password} autoFocus
@@ -133,8 +132,8 @@ export default function Admin() {
             <span className="stat-num">{Math.max(0, PROMO.totalStock - rows.length)}</span>
           </div>
           <div className="stat">
-            <span className="stat-label">이름 적어준 분</span>
-            <span className="stat-num">{rows.filter((r) => r.child_name).length}</span>
+            <span className="stat-label">희망일자 적어준 분</span>
+            <span className="stat-num">{rows.filter((r) => r.wish_date).length}</span>
           </div>
         </div>
 
@@ -163,19 +162,17 @@ export default function Admin() {
               <table>
                 <thead>
                   <tr>
-                    <th>신청시각</th><th>학년</th><th>사이즈</th>
-                    <th>요일별 짐</th><th>짜증나는 순간</th><th>아이 이름</th><th></th>
+                    <th>신청시각</th><th>주문자명</th><th>상품 옵션</th>
+                    <th>받는 희망일자</th><th></th>
                   </tr>
                 </thead>
                 <tbody>
                   {rows.map((r) => (
                     <tr key={r.id}>
                       <td className="num">{fmt(r.created_at)}</td>
-                      <td>{r.grade}</td>
+                      <td>{r.orderer_name || '—'}</td>
                       <td><strong>{sizeName(r.size)}</strong></td>
-                      <td>{r.weekly_load || '—'}</td>
-                      <td>{r.pain || '—'}</td>
-                      <td>{r.child_name || '—'}</td>
+                      <td className="num">{r.wish_date || '—'}</td>
                       <td>
                         <button className="row-del" onClick={() => remove(r.id)} title="삭제">
                           삭제
@@ -190,8 +187,8 @@ export default function Admin() {
         </section>
 
         <footer className="admin-foot">
-          수집한 정보는 <strong>{PROMO.disposeBy}</strong>까지 파기합니다.
-          아이 이름은 네임라벨 제작에만 씁니다.
+          수집한 정보(주문자명 · 상품 옵션 · 받는 희망일자)는
+          <strong> {PROMO.disposeBy}</strong>까지 보관 후 파기합니다.
         </footer>
       </div>
     </main>

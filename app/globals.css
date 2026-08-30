@@ -224,10 +224,10 @@ p { margin: 0; }
 }
 .choice:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
 
-/* 사이즈 — 이 페이지의 주인공 */
+/* 상품 옵션 — 이 페이지의 주인공. 치수를 보고 고르게 한다. */
 .sizes { display: flex; flex-direction: column; gap: 0.6rem; }
 .size {
-  display: flex; align-items: baseline; gap: 0.9rem;
+  display: flex; align-items: center; gap: 1rem;
   border: 1px solid var(--rule);
   border-radius: var(--edge);
   background: var(--surface);
@@ -246,8 +246,44 @@ p { margin: 0; }
   padding: calc(1rem - 1px) calc(1.2rem - 1px);
 }
 .size:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
-.size-name { font-weight: 600; font-size: 1.05rem; min-width: 2.6rem; }
-.size-desc { color: var(--muted); font-size: 0.9rem; }
+
+/* 이미지 자리 — 아직 없으면 회색 칸으로 비워둔다 */
+.size-img {
+  width: 5.5rem; height: 5.5rem;
+  flex-shrink: 0;
+  display: block;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  overflow: hidden;
+}
+.size-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.size-img-empty { display: block; width: 100%; height: 100%; }
+
+.size-body { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+.size-name { font-weight: 600; font-size: 1.1rem; }
+.size-desc { color: var(--ink); font-size: 0.9rem; }
+.size-dims {
+  color: var(--muted); font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.kit-list {
+  margin: 0.6rem 0 0; padding-left: 1.1rem;
+  display: flex; flex-direction: column; gap: 0.25rem;
+  font-size: 0.9rem;
+}
+
+input[type='date'] {
+  border: 1px solid var(--rule);
+  border-radius: var(--edge);
+  background: var(--surface);
+  padding: 0.8rem 1rem;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  width: 100%;
+}
+input[type='date']:focus-visible { outline: 2px solid var(--yellow); outline-offset: 1px; }
 
 input[type='text'] {
   border: 1px solid var(--rule);

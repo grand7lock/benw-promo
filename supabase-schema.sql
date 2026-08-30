@@ -1,25 +1,42 @@
 -- BENW 「미리 맞춘 개학」 신청자 테이블
 -- Supabase → SQL Editor 에 붙여넣고 Run 하면 됩니다.
 
-create table if not exists public.signups (
-  id          bigserial primary key,
-  created_at  timestamptz not null default now(),
-  grade       text not null,          -- 01. 아이 학년
-  weekly_load text,                   -- 02. 요일마다 챙기는 짐
-  pain        text,                   -- 03. 제일 짜증나는 순간
-  size        text not null,          -- 신발주머니 사이즈 (pocket | large | xlarge)
-  child_name  text                    -- 네임라벨용 (선택)
-);
+-- ─────────────────────────────────────────────────────────
+-- ① 이미 테이블을 만들어 두셨다면 이것만 실행하세요 (마이그레이션)
+--    수집 항목이 「주문자명 · 상품 옵션 · 받는 희망일자」로 바뀌었습니다.
+-- ─────────────────────────────────────────────────────────
 
--- 서버(service key)로만 쓰기 때문에 RLS 를 켜두고 정책은 열지 않습니다.
-alter table public.signups enable row level security;
+alter table public.signups
+  add column if not exists orderer_name text,
+  add column if not exists wish_date     date,
+  drop column if exists grade,
+  drop column if exists weekly_load,
+  drop column if exists pain,
+  drop column if exists child_name;
 
--- 사이즈 분포 한눈에 보기
-create or replace view public.signup_summary as
-select
-  size,
-  count(*) as 신청수,
-  round(100.0 * count(*) / nullif(sum(count(*)) over (), 0), 1) as 비율
-from public.signups
-group by size
-order by 신청수 desc;
+-- ─────────────────────────────────────────────────────────
+-- ② 처음부터 새로 만드는 경우엔 아래를 쓰세요
+-- ─────────────────────────────────────────────────────────
+
+-- create table if not exists public.signups (
+--   id           bigserial primary key,
+--   created_at   timestamptz not null default now(),
+--   orderer_name text not null,   -- 주문자명
+--   size         text not null,   -- 상품 옵션 (pocket | large | xlarge)
+--   wish_date    date             -- 받는 희망일자 (선택)
+-- );
+--
+-- alter table public.signups enable row level security;
+
+-- ─────────────────────────────────────────────────────────
+-- 자주 쓰는 조회
+-- ─────────────────────────────────────────────────────────
+
+-- 옵션별 신청 수
+--   select size, count(*) as 신청수
+--   from public.signups group by size order by 신청수 desc;
+
+-- 희망일자별 물량
+--   select wish_date, count(*) as 건수
+--   from public.signups where wish_date is not null
+--   group by wish_date order by wish_date;
