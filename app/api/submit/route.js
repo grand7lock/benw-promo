@@ -43,10 +43,11 @@ export async function DELETE(request) {
   const supabase = getSupabase()
   if (!supabase) return NextResponse.json({ ok: false, error: 'no supabase' }, { status: 500 })
 
+  // 아직 실제 신청이 없는 상태라 테스트 행 전체를 비운다.
   const { data, error } = await supabase
     .from('signups')
     .delete()
-    .eq('child_name', '테스트')
+    .gte('id', 0)
     .select()
 
   if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 })
