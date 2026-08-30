@@ -112,6 +112,27 @@ p { margin: 0; }
 }
 .anchor-note { font-size: 0.85rem; color: #9AA3B8; width: 100%; }
 
+/* 앵커 증거 — 쿠팡 실제 판매 화면 */
+.proof {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-self: flex-start;
+  max-width: 100%;
+}
+.proof img {
+  display: block;
+  max-width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: #FFFFFF;
+}
+.proof figcaption {
+  font-size: 0.78rem;
+  color: #9AA3B8;
+  font-variant-numeric: tabular-nums;
+}
+
 /* 남은 수량 */
 .stock {
   display: inline-flex;

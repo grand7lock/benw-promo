@@ -71,10 +71,21 @@ export default function Page() {
             <span className="anchor-old">단품 {won(PROMO.anchorPrice)}원</span>
             <span className="anchor-new">{won(PROMO.setPrice)}원</span>
             <span className="anchor-note">
-              쿠팡 로켓배송에서 신발주머니 하나가 {won(PROMO.anchorPrice)}원입니다.
-              그 신발주머니를 포함해 <strong>3종</strong>을 {won(PROMO.setPrice)}원에 엽니다.
+              쿠팡에서 <strong>하나에 {won(PROMO.anchorPrice)}원</strong>인 그 가방입니다.
+              그걸 포함해 <strong>3종</strong>을 {won(PROMO.setPrice)}원에 엽니다.
             </span>
           </div>
+
+          <figure className="proof">
+            <img
+              src="/coupang.png"
+              alt={`쿠팡 판매 화면 — BENW 국산 보조가방 ${won(PROMO.anchorPrice)}원`}
+              onError={(e) => { e.currentTarget.parentElement.style.display = 'none' }}
+            />
+            <figcaption>
+              쿠팡 실제 판매 화면 · 정가 {won(PROMO.anchorList)}원 → {won(PROMO.anchorPrice)}원
+            </figcaption>
+          </figure>
 
           <span className="stock">
             <i className="dot" aria-hidden="true" />
