@@ -1,16 +1,18 @@
 /* BENW · 미리 맞춘 개학
-   스타일 카드 — 여백이 많은 · 차분한 · 각진 · 네이비/옐로 */
+   스타일 카드 — 여백이 많은 · 산뜻한 · 각진 · 네이버 그린 계열 */
 
 :root {
-  --navy:       #16233F;
-  --navy-soft:  #2E3E62;
-  --paper:      #FBFAF7;
+  /* 네이버 녹색 계열 · 초등 신학기 · 산뜻하게 */
+  --navy:       #0A4A2E;   /* 딥그린 — 반전 블록·버튼 바탕 */
+  --navy-soft:  #2E6B4C;   /* 본문 보조 */
+  --paper:      #F3FAF6;   /* 아주 옅은 초록빛 종이 */
   --surface:    #FFFFFF;
-  --yellow:     #F2C230;
-  --yellow-dim: #FDF3D4;
-  --rule:       #E3E1D9;
-  --muted:      #6C7385;
-  --ink:        #1A2238;
+  --yellow:     #03C75A;   /* 네이버 그린 — 강조 */
+  --yellow-dim: #E4F7EC;   /* 옅은 초록 채움 */
+  --rule:       #D8EDE1;
+  --muted:      #5F7568;
+  --ink:        #143122;
+  --green-text: #067A3C;   /* 밝은 바탕 위 초록 글자 (대비 확보용) */
 
   --gap-s:  0.75rem;
   --gap-m:  1.5rem;
@@ -76,13 +78,14 @@ p { margin: 0; }
 
 /* ---------- 히어로 ---------- */
 .hero {
-  background: var(--navy);
-  color: #F4F5F2;
+  background: var(--yellow-dim);
+  color: var(--ink);
   padding: var(--gap-xl) 0 var(--gap-l);
+  border-bottom: 1px solid var(--rule);
 }
-.hero h1 { color: #FFFFFF; }
-.hero .eyebrow { color: var(--yellow); }
-.hero .lede { color: #C3C9D8; }
+.hero h1 { color: var(--navy); }
+.hero .eyebrow { color: var(--green-text); }
+.hero .lede { color: var(--navy-soft); }
 
 .hero-inner { display: flex; flex-direction: column; gap: var(--gap-m); }
 
@@ -92,25 +95,26 @@ p { margin: 0; }
   align-items: baseline;
   gap: 1rem;
   flex-wrap: wrap;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
   padding: 1.25rem 0;
   margin-top: 0.5rem;
 }
 .anchor-old {
   font-size: 1.05rem;
-  color: #9AA3B8;
+  color: var(--muted);
   text-decoration: line-through;
   text-decoration-thickness: 2px;
 }
 .anchor-new {
   font-size: clamp(2rem, 8vw, 2.6rem);
   font-weight: 700;
-  color: var(--yellow);
+  color: var(--green-text);
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
-.anchor-note { font-size: 0.85rem; color: #9AA3B8; width: 100%; }
+.anchor-note { font-size: 0.85rem; color: var(--navy-soft); width: 100%; }
+.anchor-note a { color: var(--green-text); text-underline-offset: 2px; }
 
 /* 앵커 증거 — 쿠팡 실제 판매 화면 */
 .proof {
@@ -124,12 +128,12 @@ p { margin: 0; }
 .proof img {
   display: block;
   max-width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid var(--rule);
   background: #FFFFFF;
 }
 .proof figcaption {
   font-size: 0.78rem;
-  color: #9AA3B8;
+  color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
 
@@ -138,9 +142,9 @@ p { margin: 0; }
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  background: rgba(242, 194, 48, 0.14);
-  border: 1px solid rgba(242, 194, 48, 0.4);
-  color: var(--yellow);
+  background: var(--surface);
+  border: 1px solid var(--yellow);
+  color: var(--green-text);
   padding: 0.4rem 0.8rem;
   font-size: 0.86rem;
   font-weight: 500;
@@ -183,7 +187,7 @@ p { margin: 0; }
   color: #F4F5F2;
 }
 .kit-card.mystery h3 { color: var(--yellow); font-size: 2rem; line-height: 1; }
-.kit-card.mystery .muted { color: #9AA3B8; }
+.kit-card.mystery .muted { color: #B7DCC7; }
 .kit-tag {
   font-size: 0.7rem; letter-spacing: 0.12em; font-weight: 600;
   color: var(--muted);
@@ -271,7 +275,7 @@ input[type='text']:focus-visible { outline: 2px solid var(--yellow); outline-off
   text-decoration: none;
   transition: background .12s;
 }
-.btn:hover { background: #0F1932; }
+.btn:hover { background: #06331D; }
 .btn:disabled { opacity: .45; cursor: not-allowed; }
 .btn:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
 
@@ -280,14 +284,14 @@ input[type='text']:focus-visible { outline: 2px solid var(--yellow); outline-off
   border-color: var(--yellow);
   color: var(--navy);
 }
-.btn-accent:hover { background: #E5B520; }
+.btn-accent:hover { background: #02B551; }
 
 .btn-ghost {
   background: transparent;
   color: var(--navy);
   border-color: var(--navy);
 }
-.btn-ghost:hover { background: rgba(22, 35, 63, 0.05); }
+.btn-ghost:hover { background: rgba(10, 74, 46, 0.06); }
 
 /* ---------- 진행 표시 ---------- */
 .steps { display: flex; gap: 0.5rem; margin-bottom: var(--gap-m); }

@@ -75,6 +75,14 @@ export default function Page() {
             <span className="anchor-note">
               쿠팡에서 <strong>하나에 {won(PROMO.anchorPrice)}원</strong>인 그 가방입니다.
               그걸 포함해 <strong>3종</strong>을 {won(PROMO.setPrice)}원에 엽니다.
+              {PROMO.anchorUrl && (
+                <>
+                  {' '}
+                  <a href={PROMO.anchorUrl} target="_blank" rel="noopener noreferrer">
+                    쿠팡에서 확인하기 →
+                  </a>
+                </>
+              )}
             </span>
           </div>
 
