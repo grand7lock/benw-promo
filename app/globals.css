@@ -248,13 +248,17 @@ p { margin: 0; }
 .size:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
 
 /* 이미지 자리 — 아직 없으면 회색 칸으로 비워둔다 */
+/* 이미지에 치수 표기가 들어 있어서 작게 두면 못 읽는다. 넉넉히 준다. */
 .size-img {
-  width: 5.5rem; height: 5.5rem;
+  width: 7.5rem; height: 8.5rem;
   flex-shrink: 0;
   display: block;
-  background: var(--paper);
+  background: #FFFFFF;
   border: 1px solid var(--rule);
   overflow: hidden;
+}
+@media (max-width: 420px) {
+  .size-img { width: 6rem; height: 7rem; }
 }
 .size-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .size-img-empty { display: block; width: 100%; height: 100%; }
