@@ -61,11 +61,19 @@ export async function POST(request) {
     return NextResponse.json({ ok: false, error: '요청을 읽지 못했습니다.' }, { status: 400 })
   }
 
-  const { grade, weekly_load, pain, size, child_name } = body || {}
+  const { grade, weekly_load, pain, size, child_name, consent } = body || {}
 
   if (!grade || !size) {
     return NextResponse.json(
       { ok: false, error: '학년과 사이즈는 꼭 골라주세요.' },
+      { status: 400 },
+    )
+  }
+
+  // 개인정보(아이 이름)를 받으므로 동의 없이는 저장하지 않는다. 클라이언트 검증만으로는 부족하다.
+  if (consent !== true) {
+    return NextResponse.json(
+      { ok: false, error: '개인정보 수집·이용에 동의해주셔야 신청됩니다.' },
       { status: 400 },
     )
   }

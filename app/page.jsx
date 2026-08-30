@@ -17,6 +17,7 @@ export default function Page() {
   const [pain, setPain] = useState('')
   const [size, setSize] = useState('')
   const [childName, setChildName] = useState('')
+  const [consent, setConsent] = useState(false)
 
   useEffect(() => {
     fetch('/api/submit')
@@ -31,6 +32,7 @@ export default function Page() {
 
     if (!grade) { setError('아이 학년을 골라주세요.'); return }
     if (!size)  { setError('신발주머니 사이즈를 골라주세요.'); return }
+    if (!consent) { setError('개인정보 수집·이용에 동의해주셔야 신청됩니다.'); return }
 
     setSending(true)
     try {
@@ -38,7 +40,7 @@ export default function Page() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          grade, weekly_load: weeklyLoad, pain, size, child_name: childName,
+          grade, weekly_load: weeklyLoad, pain, size, child_name: childName, consent,
         }),
       })
       const data = await res.json()
@@ -248,6 +250,44 @@ export default function Page() {
                     placeholder="예 · 김서준"
                     maxLength={20}
                   />
+                </div>
+
+                <div className="consent">
+                  <label className="consent-check">
+                    <input
+                      type="checkbox"
+                      checked={consent}
+                      onChange={(e) => setConsent(e.target.checked)}
+                    />
+                    <span>
+                      <strong>[필수]</strong> 개인정보 수집·이용에 동의합니다.
+                    </span>
+                  </label>
+
+                  <dl className="consent-detail">
+                    <div>
+                      <dt>수집 항목</dt>
+                      <dd>아이 학년 · 요일별 준비물 · 불편한 점 · 신발주머니 사이즈 · <strong>아이 이름(선택)</strong></dd>
+                    </div>
+                    <div>
+                      <dt>이용 목적</dt>
+                      <dd>「{PROMO.title}」 세트 알림신청 접수 · 사이즈 배정 · 다음 시즌 구성 참고</dd>
+                    </div>
+                    <div>
+                      <dt>보유 기간</dt>
+                      <dd>프로모션 종료 후 3개월 이내 파기 (<strong>{PROMO.disposeBy}</strong>까지)</dd>
+                    </div>
+                  </dl>
+
+                  <p className="consent-note">
+                    동의를 거부하실 수 있으며, 거부하시면 신청이 어렵습니다.
+                    아이 이름은 <strong>네임라벨 제작에만</strong> 쓰이며 적지 않으셔도 신청됩니다.
+                  </p>
+
+                  <p className="consent-note">
+                    알림은 <strong>스마트스토어 알림받기 · 카카오톡 채널</strong>로 발송됩니다.
+                    마케팅 수신 동의는 <strong>각 채널에서 직접</strong> 하시게 되며, 이 페이지에서는 받지 않습니다.
+                  </p>
                 </div>
 
                 {error && (
