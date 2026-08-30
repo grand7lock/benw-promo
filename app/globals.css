@@ -117,13 +117,15 @@ p { margin: 0; }
 .anchor-note a { color: var(--green-text); text-underline-offset: 2px; }
 
 /* 앵커 증거 — 쿠팡 실제 판매 화면 */
+/* 본문 폭(40rem) 밖으로 넓게 빼서 가격이 읽히게 한다. 캡처는 자르지 않는다. */
 .proof {
   margin: 0;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  align-self: flex-start;
-  max-width: 100%;
+  width: min(54rem, calc(100vw - 3rem));
+  margin-left: 50%;
+  transform: translateX(-50%);
 }
 .proof img {
   display: block;
