@@ -123,7 +123,7 @@ p { margin: 0; }
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  width: min(46rem, calc(100vw - 3rem));   /* 캡처 원본 736px — 그 이상 늘리면 흐려진다 */
+  width: min(21rem, calc(100vw - 3rem));   /* 모바일 캡처라 세로가 길다. 폰 화면 너비로 둔다 */
   margin-left: 50%;
   transform: translateX(-50%);
 }
