@@ -304,7 +304,7 @@ export default function Page() {
                 style={{ marginTop: '1rem' }}
                 onClick={() => { setStep(3); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
               >
-                둘 다 했어요 — 개학 키트 받기
+                {gateCount > 1 ? '둘 다 했어요' : '눌렀어요'} — 개학 키트 받기
               </button>
             </div>
           </div>
