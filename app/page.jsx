@@ -54,6 +54,8 @@ export default function Page() {
   }
 
   const sizeLabel = SIZES.find((s) => s.id === size)?.name
+  // 주소가 채워진 가두리망만 노출한다. 죽은 버튼을 보여주지 않기 위해서.
+  const gateCount = [PROMO.storeUrl, PROMO.kakaoUrl].filter(Boolean).length
 
   return (
     <>
@@ -266,7 +268,7 @@ export default function Page() {
             </h2>
             <p className="lede" style={{ marginTop: '0.8rem' }}>
               {PROMO.openDate}에 여는 순간 알려드릴 곳이 필요합니다.
-              <strong> 둘 다 눌러주셔야</strong> 자리가 확정됩니다.
+              <strong> {gateCount > 1 ? '둘 다 눌러주셔야' : '아래를 눌러주셔야'}</strong> 자리가 확정됩니다.
             </p>
 
             <div className="gate-note" style={{ marginTop: '1.5rem' }}>
@@ -275,22 +277,26 @@ export default function Page() {
             </div>
 
             <div className="gate">
-              <a
-                className="btn btn-accent"
-                href={PROMO.storeUrl || '#'}
-                target="_blank" rel="noopener noreferrer"
-                onClick={() => setGateDone((g) => ({ ...g, store: true }))}
-              >
-                ① 스마트스토어 알림받기 {gateDone.store ? '✓' : ''}
-              </a>
-              <a
-                className="btn btn-accent"
-                href={PROMO.kakaoUrl || '#'}
-                target="_blank" rel="noopener noreferrer"
-                onClick={() => setGateDone((g) => ({ ...g, kakao: true }))}
-              >
-                ② 카카오톡 채널 추가 {gateDone.kakao ? '✓' : ''}
-              </a>
+              {PROMO.storeUrl && (
+                <a
+                  className="btn btn-accent"
+                  href={PROMO.storeUrl}
+                  target="_blank" rel="noopener noreferrer"
+                  onClick={() => setGateDone((g) => ({ ...g, store: true }))}
+                >
+                  {gateCount > 1 ? '① ' : ''}스마트스토어 알림받기 {gateDone.store ? '✓' : ''}
+                </a>
+              )}
+              {PROMO.kakaoUrl && (
+                <a
+                  className="btn btn-accent"
+                  href={PROMO.kakaoUrl}
+                  target="_blank" rel="noopener noreferrer"
+                  onClick={() => setGateDone((g) => ({ ...g, kakao: true }))}
+                >
+                  {gateCount > 1 ? '② ' : ''}카카오톡 채널 추가 {gateDone.kakao ? '✓' : ''}
+                </a>
+              )}
 
               <button
                 className="btn btn-ghost"
@@ -324,14 +330,20 @@ export default function Page() {
               요일별 준비물 체크리스트 · 방수 네임라벨 · 냄새 관리법 3장.
             </div>
 
-            <a
-              className="btn"
-              href={PROMO.kitUrl || '#'}
-              target="_blank" rel="noopener noreferrer"
-              style={{ marginTop: '0.5rem' }}
-            >
-              개학 키트 PDF 받기
-            </a>
+            {PROMO.kitUrl ? (
+              <a
+                className="btn"
+                href={PROMO.kitUrl}
+                target="_blank" rel="noopener noreferrer"
+                style={{ marginTop: '0.5rem' }}
+              >
+                개학 키트 PDF 받기
+              </a>
+            ) : (
+              <p className="muted" style={{ marginTop: '0.5rem' }}>
+                개학 키트는 신청하신 곳으로 바로 보내드립니다.
+              </p>
+            )}
 
             <p className="muted" style={{ marginTop: '1.5rem' }}>
               {PROMO.totalStock}세트 중 <strong>{remaining}세트</strong> 남았습니다.
