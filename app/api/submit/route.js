@@ -61,8 +61,9 @@ export async function POST(request) {
   })
 
   if (error) {
+    // 사용자 흐름은 끊지 않되, 왜 저장이 안 됐는지는 응답에 남긴다.
     console.error('[signup · 저장 실패]', error.message)
-    return NextResponse.json({ ok: true, stored: false })
+    return NextResponse.json({ ok: true, stored: false, reason: error.message })
   }
 
   return NextResponse.json({ ok: true, stored: true })
