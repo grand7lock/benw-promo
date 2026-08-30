@@ -227,7 +227,10 @@ export default function Page() {
 
                 <div className="field">
                   <span className="field-label">03. 받는 희망일자</span>
-                  <span className="field-help">비워두시면 오픈 순서대로 보내드립니다.</span>
+                  <span className="field-help">
+                    비워두시면 오픈 순서대로 보내드립니다.
+                    <strong> 2027년 3월</strong>까지 고르실 수 있어요 — 다음 신학기에 맞춰 받으셔도 됩니다.
+                  </span>
                   <input
                     type="date" value={wishDate}
                     onChange={(e) => setWishDate(e.target.value)}
