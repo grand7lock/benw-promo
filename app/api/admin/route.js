@@ -63,7 +63,16 @@ export async function GET() {
 
   if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 })
 
-  return NextResponse.json({ ok: true, authed: true, rows: data || [] })
+  // 마이그레이션 전에 저장된 행은 옛 컬럼에 값이 들어 있다. 한 모양으로 맞춰서 내보낸다.
+  const rows = (data || []).map((r) => ({
+    id: r.id,
+    created_at: r.created_at,
+    size: r.size,
+    orderer_name: r.orderer_name ?? r.grade ?? null,
+    wish_date: r.wish_date ?? r.weekly_load ?? null,
+  }))
+
+  return NextResponse.json({ ok: true, authed: true, rows })
 }
 
 // 한 건 삭제

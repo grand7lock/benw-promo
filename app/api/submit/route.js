@@ -66,11 +66,25 @@ export async function POST(request) {
     return NextResponse.json({ ok: true, stored: false })
   }
 
-  const { error } = await supabase.from('signups').insert({
-    orderer_name: String(orderer_name).trim().slice(0, 40),
+  const name = String(orderer_name).trim().slice(0, 40)
+
+  let { error } = await supabase.from('signups').insert({
+    orderer_name: name,
     size,
     wish_date: wish_date || null,
   })
+
+  // 마이그레이션 전이면 새 컬럼이 없다. 그때는 옛 컬럼에 담는다.
+  // (grade ← 주문자명 / weekly_load ← 희망일자) 읽는 쪽에서 다시 합쳐준다.
+  // supabase-schema.sql 의 alter 를 돌리고 나면 이 경로는 더 이상 타지 않는다.
+  if (error && /does not exist|schema cache|Could not find/i.test(error.message)) {
+    const retry = await supabase.from('signups').insert({
+      grade: name,
+      size,
+      weekly_load: wish_date || null,
+    })
+    error = retry.error
+  }
 
   if (error) {
     // 사용자 흐름은 끊지 않되, 왜 저장이 안 됐는지는 응답에 남긴다.
