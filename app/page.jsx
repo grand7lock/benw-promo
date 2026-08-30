@@ -78,16 +78,17 @@ export default function Page() {
             </span>
           </div>
 
-          <figure className="proof">
-            <img
-              src="/coupang.png"
-              alt={`쿠팡 판매 화면 — BENW 국산 보조가방 ${won(PROMO.anchorPrice)}원`}
-              onError={(e) => { e.currentTarget.parentElement.style.display = 'none' }}
-            />
-            <figcaption>
-              쿠팡 실제 판매 화면 · 정가 {won(PROMO.anchorList)}원 → {won(PROMO.anchorPrice)}원
-            </figcaption>
-          </figure>
+          {PROMO.proofImg && (
+            <figure className="proof">
+              <img
+                src={PROMO.proofImg}
+                alt={`쿠팡 판매 화면 — BENW 국산 보조가방 ${won(PROMO.anchorPrice)}원`}
+              />
+              <figcaption>
+                쿠팡 실제 판매 화면 · 정가 {won(PROMO.anchorList)}원 → {won(PROMO.anchorPrice)}원
+              </figcaption>
+            </figure>
+          )}
 
           <span className="stock">
             <i className="dot" aria-hidden="true" />
