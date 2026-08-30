@@ -15,11 +15,17 @@ export async function GET() {
     .from('signups')
     .select('*', { count: 'exact', head: true })
 
-  if (error) {
-    return NextResponse.json({ count: 0, remaining: PROMO.totalStock, connected: false })
+  // 테이블이 없으면 count 가 null 로만 오고 error 가 비는 경우가 있어 둘 다 본다.
+  if (error || count === null || count === undefined) {
+    return NextResponse.json({
+      count: 0,
+      remaining: PROMO.totalStock,
+      connected: false,
+      reason: error?.message || 'signups 테이블을 찾지 못했습니다.',
+    })
   }
 
-  const used = count || 0
+  const used = count
   return NextResponse.json({
     count: used,
     remaining: Math.max(0, PROMO.totalStock - used),
