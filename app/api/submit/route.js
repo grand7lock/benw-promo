@@ -11,17 +11,24 @@ export async function GET() {
     return NextResponse.json({ count: 0, remaining: PROMO.totalStock, connected: false })
   }
 
-  const { count, error } = await supabase
+  const { count, error, status } = await supabase
     .from('signups')
     .select('*', { count: 'exact', head: true })
 
-  // 테이블이 없으면 count 가 null 로만 오고 error 가 비는 경우가 있어 둘 다 본다.
+  // HEAD 요청은 본문이 없어서 인증 실패(401)여도 error.message 가 빈 문자열로 온다.
+  // 테이블이 없으면(404→204) error 가 아예 비고 count 만 null 이다. status 로 갈라서 말해준다.
   if (error || count === null || count === undefined) {
+    const reason = error?.message
+      || (status === 401 || status === 403
+        ? `Supabase 인증 실패 (HTTP ${status}) — SUPABASE_URL / SUPABASE_SERVICE_KEY 를 확인하세요`
+        : status === 204
+          ? 'signups 테이블을 찾지 못했습니다.'
+          : `Supabase 응답 HTTP ${status}`)
     return NextResponse.json({
       count: 0,
       remaining: PROMO.totalStock,
       connected: false,
-      reason: error?.message || 'signups 테이블을 찾지 못했습니다.',
+      reason,
     })
   }
 

@@ -196,7 +196,7 @@ export default function Admin() {
         </section>
 
         <footer className="admin-foot">
-          수집한 정보(주문자명 · 상품 옵션 · 받는 희망일자)는
+          수집한 정보(주문자명 · 상품 옵션 · 받는 희망일자 · 동의 여부와 동의 일시)는
           <strong> {PROMO.disposeBy}</strong>까지 보관 후 파기합니다.
         </footer>
       </div>

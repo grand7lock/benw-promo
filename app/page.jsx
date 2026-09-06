@@ -302,8 +302,8 @@ export default function Page() {
                   </p>
 
                   <p className="consent-note">
-                    알림은 <strong>스마트스토어 알림받기 · 카카오톡 채널</strong>로 발송됩니다.
-                    마케팅 수신 동의는 <strong>각 채널에서 직접</strong> 하시게 되며, 이 페이지에서는 받지 않습니다.
+                    세트 오픈·재입고 알림은 <strong>스마트스토어 알림받기 · 카카오톡 채널</strong>로 보내드립니다.
+                    위 [선택] 동의는 BENW가 직접 보내는 신상품·할인 안내에만 쓰이며, 언제든 수신거부하실 수 있습니다.
                   </p>
                 </div>
 
