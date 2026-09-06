@@ -3,6 +3,13 @@
 import { useEffect, useState, useCallback } from 'react'
 import { PROMO, SIZES } from '../../lib/config'
 
+// 광고성 수신동의 — 컬럼 마이그레이션 전이면 값 자체가 없어서 '—' 로 둔다.
+function consentLabel(v) {
+  if (v === true) return '동의'
+  if (v === false) return '미동의'
+  return '—'
+}
+
 const sizeName = (id) => SIZES.find((s) => s.id === id)?.name || id
 
 function fmt(iso) {
@@ -58,9 +65,10 @@ export default function Admin() {
   }
 
   function downloadCsv() {
-    const head = ['신청시각', '주문자명', '상품 옵션', '받는 희망일자']
+    const head = ['신청시각', '주문자명', '상품 옵션', '받는 희망일자', '광고성 수신동의']
     const body = rows.map((r) => [
       fmt(r.created_at), r.orderer_name || '', sizeName(r.size), r.wish_date || '',
+      consentLabel(r.marketing_consent),
     ])
     const esc = (v) => `"${String(v).replace(/"/g, '""')}"`
     const csv = '﻿' + [head, ...body].map((line) => line.map(esc).join(',')).join('\r\n')
@@ -163,7 +171,7 @@ export default function Admin() {
                 <thead>
                   <tr>
                     <th>신청시각</th><th>주문자명</th><th>상품 옵션</th>
-                    <th>받는 희망일자</th><th></th>
+                    <th>받는 희망일자</th><th>광고성 수신동의</th><th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -173,6 +181,7 @@ export default function Admin() {
                       <td>{r.orderer_name || '—'}</td>
                       <td><strong>{sizeName(r.size)}</strong></td>
                       <td className="num">{r.wish_date || '—'}</td>
+                      <td className="num">{consentLabel(r.marketing_consent)}</td>
                       <td>
                         <button className="row-del" onClick={() => remove(r.id)} title="삭제">
                           삭제

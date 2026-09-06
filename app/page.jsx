@@ -15,7 +15,9 @@ export default function Page() {
   const [ordererName, setOrdererName] = useState('')
   const [size, setSize] = useState('')
   const [wishDate, setWishDate] = useState('')
-  const [consent, setConsent] = useState(false)
+  const [consent, setConsent] = useState(false)          // [필수] 개인정보
+  const [termsAgreed, setTermsAgreed] = useState(false)  // [필수] 이용약관
+  const [marketing, setMarketing] = useState(false)      // [선택] 광고성 수신
 
   useEffect(() => {
     fetch('/api/submit')
@@ -30,6 +32,7 @@ export default function Page() {
 
     if (!ordererName.trim()) { setError('주문자명을 적어주세요.'); return }
     if (!size) { setError('상품 옵션을 골라주세요.'); return }
+    if (!termsAgreed) { setError('서비스 이용약관에 동의해주셔야 신청됩니다.'); return }
     if (!consent) { setError('개인정보 수집·이용에 동의해주셔야 신청됩니다.'); return }
 
     setSending(true)
@@ -42,6 +45,8 @@ export default function Page() {
           size,
           wish_date: wishDate || null,
           consent,
+          terms_agreed: termsAgreed,
+          marketing_consent: marketing,
         }),
       })
       const data = await res.json()
@@ -243,18 +248,44 @@ export default function Page() {
                   <label className="consent-check">
                     <input
                       type="checkbox"
+                      checked={termsAgreed}
+                      onChange={(e) => setTermsAgreed(e.target.checked)}
+                    />
+                    <span>
+                      <strong>[필수]</strong> <a href="/terms" target="_blank" rel="noopener noreferrer">서비스 이용약관</a>에 동의합니다.
+                    </span>
+                  </label>
+
+                  <label className="consent-check">
+                    <input
+                      type="checkbox"
                       checked={consent}
                       onChange={(e) => setConsent(e.target.checked)}
                     />
                     <span>
-                      <strong>[필수]</strong> 개인정보 수집·이용에 동의합니다.
+                      <strong>[필수]</strong> <a href="/privacy" target="_blank" rel="noopener noreferrer">개인정보 수집·이용</a>에 동의합니다.
+                    </span>
+                  </label>
+
+                  <label className="consent-check">
+                    <input
+                      type="checkbox"
+                      checked={marketing}
+                      onChange={(e) => setMarketing(e.target.checked)}
+                    />
+                    <span>
+                      <strong className="opt">[선택]</strong> 광고성 정보 수신에 동의합니다.
+                      <span className="consent-sub">
+                        신상품·할인 안내를 이메일·문자·카카오톡으로 받습니다. 월 2회 이내.
+                        <strong> 거부하셔도 신청에는 아무 제한이 없습니다.</strong>
+                      </span>
                     </span>
                   </label>
 
                   <dl className="consent-detail">
                     <div>
                       <dt>수집 항목</dt>
-                      <dd>주문자명 · 상품 옵션 · 받는 희망일자</dd>
+                      <dd>주문자명 · 상품 옵션 · 받는 희망일자 · 동의 여부와 동의 일시</dd>
                     </div>
                     <div>
                       <dt>이용 목적</dt>
@@ -394,6 +425,11 @@ export default function Page() {
           <span><strong>BENW</strong> · 타포린백 · 보냉백 · 신발주머니 · 100% 국내 생산</span>
           <span>알림신청 {PROMO.applyStart} ~ {PROMO.applyEnd} · 선착순 {won(PROMO.totalStock)}세트</span>
           <span>「{PROMO.title}」 — 우리는 가방을 파는 게 아니라, 자기 상황을 알고 고르게 되는 상태를 팝니다.</span>
+          <span className="foot-links">
+            <a href="/privacy">개인정보 처리방침</a>
+            <span aria-hidden="true"> · </span>
+            <a href="/terms">서비스 이용약관</a>
+          </span>
         </div>
       </footer>
     </>

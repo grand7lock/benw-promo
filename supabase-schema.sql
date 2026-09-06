@@ -7,8 +7,13 @@
 -- ─────────────────────────────────────────────────────────
 
 alter table public.signups
-  add column if not exists orderer_name text,
-  add column if not exists wish_date     date,
+  add column if not exists orderer_name      text,
+  add column if not exists wish_date         date,
+  -- 동의 이력. 받았다는 사실과 받은 시각을 남겨야 나중에 증빙이 됩니다.
+  add column if not exists terms_agreed      boolean,
+  add column if not exists privacy_agreed    boolean,
+  add column if not exists marketing_consent boolean,
+  add column if not exists consented_at      timestamptz,
   drop column if exists grade,
   drop column if exists weekly_load,
   drop column if exists pain,
@@ -21,9 +26,13 @@ alter table public.signups
 -- create table if not exists public.signups (
 --   id           bigserial primary key,
 --   created_at   timestamptz not null default now(),
---   orderer_name text not null,   -- 주문자명
---   size         text not null,   -- 상품 옵션 (pocket | large | xlarge)
---   wish_date    date             -- 받는 희망일자 (선택)
+--   orderer_name      text not null,   -- 주문자명
+--   size              text not null,   -- 상품 옵션 (pocket | large | xlarge)
+--   wish_date         date,            -- 받는 희망일자 (선택)
+--   terms_agreed      boolean,         -- [필수] 이용약관 동의
+--   privacy_agreed    boolean,         -- [필수] 개인정보 수집·이용 동의
+--   marketing_consent boolean,         -- [선택] 광고성 정보 수신 동의
+--   consented_at      timestamptz      -- 동의한 시각
 -- );
 --
 -- alter table public.signups enable row level security;
@@ -35,6 +44,11 @@ alter table public.signups
 -- 옵션별 신청 수
 --   select size, count(*) as 신청수
 --   from public.signups group by size order by 신청수 desc;
+
+-- 마케팅 수신동의한 사람만 (광고성 메시지는 이 명단에만 보낼 수 있습니다)
+--   select orderer_name, consented_at
+--   from public.signups where marketing_consent is true
+--   order by consented_at desc;
 
 -- 희망일자별 물량
 --   select wish_date, count(*) as 건수
