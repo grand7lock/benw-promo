@@ -6,6 +6,7 @@
 --    수집 항목이 「주문자명 · 상품 옵션 · 받는 희망일자」로 바뀌었습니다.
 -- ─────────────────────────────────────────────────────────
 
+-- 1단계 · 새 컬럼 추가 (있으면 건너뜀)
 alter table public.signups
   add column if not exists orderer_name      text,
   add column if not exists wish_date         date,
@@ -13,7 +14,28 @@ alter table public.signups
   add column if not exists terms_agreed      boolean,
   add column if not exists privacy_agreed    boolean,
   add column if not exists marketing_consent boolean,
-  add column if not exists consented_at      timestamptz,
+  add column if not exists consented_at      timestamptz;
+
+-- 2단계 · 옛 컬럼에 들어 있던 값을 새 컬럼으로 옮김
+--    (마이그레이션 전에 신청한 사람의 이름·희망일자가 여기 있습니다. 먼저 옮기고 지워야 안 날아갑니다)
+do $$
+begin
+  if exists (select 1 from information_schema.columns
+             where table_schema = 'public' and table_name = 'signups' and column_name = 'grade') then
+    update public.signups set orderer_name = grade
+     where orderer_name is null and grade is not null;
+  end if;
+  if exists (select 1 from information_schema.columns
+             where table_schema = 'public' and table_name = 'signups' and column_name = 'weekly_load') then
+    -- weekly_load 는 text 라 날짜가 아닌 값('주 3회' 등)이 들어 있을 수 있다.
+    -- YYYY-MM-DD 꼴만 옮기고 나머지는 버린다. (캐스트 실패로 전체가 롤백되는 걸 막기 위해)
+    update public.signups set wish_date = weekly_load::date
+     where wish_date is null and weekly_load ~ '^\d{4}-\d{2}-\d{2}$';
+  end if;
+end $$;
+
+-- 3단계 · 옛 컬럼 정리
+alter table public.signups
   drop column if exists grade,
   drop column if exists weekly_load,
   drop column if exists pain,

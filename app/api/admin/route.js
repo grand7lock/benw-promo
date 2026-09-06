@@ -70,6 +70,9 @@ export async function GET() {
     size: r.size,
     orderer_name: r.orderer_name ?? r.grade ?? null,
     wish_date: r.wish_date ?? r.weekly_load ?? null,
+    // 동의 이력. 컬럼 마이그레이션 전 행은 값이 없어서 null 로 나간다.
+    marketing_consent: r.marketing_consent ?? null,
+    consented_at: r.consented_at ?? null,
   }))
 
   return NextResponse.json({ ok: true, authed: true, rows })
